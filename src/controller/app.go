@@ -1,13 +1,13 @@
-package controllers
+package controller
 
 import (
 	"net/http"
 
-	"github.com/go-login-prac/src/services"
+	"github.com/go-login-prac/src/service"
 )
 
 type AppController struct {
-	AppService services.IAppService
+	AppService service.IAppService
 }
 
 func (c AppController) Index(w http.ResponseWriter, r *http.Request) {

@@ -1,14 +1,14 @@
-package controllers
+package controller
 
 import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/go-login-prac/src/services"
+	"github.com/go-login-prac/src/service"
 )
 
 type AuthController struct {
-	AuthService services.IAuthService
+	AuthService service.IAuthService
 }
 
 type loginBody struct {
