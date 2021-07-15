@@ -8,8 +8,8 @@ import (
 )
 
 func PostRouter(r *mux.Router) {
-	// s := r.PathPrefix("/post").Subrouter()
-	r.HandleFunc("/post/", func(w http.ResponseWriter, r *http.Request) {
+	s := r.PathPrefix("/post").Subrouter()
+	s.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		log.Print("/")
 	})
 }

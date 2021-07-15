@@ -7,11 +7,11 @@ import (
 )
 
 type loginBody struct {
-	email    string
-	password string
+	Email    string `json:"email"` // ここを emailと小文字にすると、decode/encodeがうまく行かない。違うパッケージ内で処理されるため
+	Password string `json:"password"`
 }
 type loginResponse struct {
-	message string
+	Message string `json:"message"`
 }
 
 func AuthLogin(w http.ResponseWriter, r *http.Request) {
@@ -22,8 +22,9 @@ func AuthLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if body.email == "hoge@example.com" && body.password == "hogehoge" {
-		respondJson(w, loginResponse{message: "ok"})
+	if body.Email == "hoge@example.com" && body.Password == "hogehoge" {
+		respondJson(w, loginResponse{Message: "ok"})
+		return
 	}
 	http.Error(w, errors.New("wrong").Error(), http.StatusUnauthorized)
 }

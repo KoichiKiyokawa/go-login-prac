@@ -6,6 +6,7 @@ import (
 )
 
 func AuthRouter(r *mux.Router) {
-	r.HandleFunc("/auth/login", controller.AuthLogin).Methods("POST")
-	r.HandleFunc("/auth", controller.AuthIndex).Methods("GET")
+	s := r.PathPrefix("/auth").Subrouter()
+	s.HandleFunc("/login", controller.AuthLogin).Methods("POST")
+	s.HandleFunc("/", controller.AuthIndex).Methods("GET")
 }
