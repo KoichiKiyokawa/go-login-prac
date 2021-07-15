@@ -4,16 +4,16 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-login-prac/src/router"
+	"github.com/go-login-prac/src/routers"
 	"github.com/gorilla/mux"
 )
 
 func main() {
 	r := mux.NewRouter().StrictSlash(true)
-	router.AuthRouter(r)
-	router.PostRouter(r)
+	routers.AuthRouter(r)
+	routers.PostRouter(r)
 
-	router.ShowAllRoutes(r)
+	routers.ShowAllRoutes(r)
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
