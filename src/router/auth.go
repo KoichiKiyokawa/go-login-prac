@@ -3,11 +3,15 @@ package router
 import (
 	"github.com/go-login-prac/src/controller"
 	"github.com/go-login-prac/src/repository"
+	"github.com/go-login-prac/src/services"
 	"github.com/gorilla/mux"
 )
 
 func AuthRouter(r *mux.Router) {
-	authController := controller.AuthController{AuthRepo: repository.AuthRepository{}}
+	// ここで依存を注入する
+	authRepository := repository.AuthRepository{}
+	authService := services.AuthService{AuthRepository: authRepository}
+	authController := controller.AuthController{AuthService: authService}
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.HandleFunc("/login", authController.AuthLogin).Methods("POST")

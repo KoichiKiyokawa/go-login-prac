@@ -2,14 +2,13 @@ package controller
 
 import (
 	"encoding/json"
-	"errors"
 	"net/http"
 
-	"github.com/go-login-prac/src/repository"
+	"github.com/go-login-prac/src/services"
 )
 
 type AuthController struct {
-	AuthRepo repository.IAuthRepository
+	AuthService services.IAuthService
 }
 
 type loginBody struct {
@@ -25,17 +24,15 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := c.AuthRepo.FindByEmail(body.Email)
+	user, err := c.AuthService.ValidateUser(body.Email, body.Password)
 	if err != nil {
-		http.Error(w, errors.New("something wrong").Error(), http.StatusUnauthorized)
+		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return
 	}
 
-	if user.Password == body.Password {
-		respondJson(w, user)
-		return
-	}
-	http.Error(w, errors.New("wrong").Error(), http.StatusUnauthorized)
+	// TODO: セッションに書き込む処理
+
+	respondJson(w, user)
 }
 
 func (AuthController) AuthIndex(w http.ResponseWriter, r *http.Request) {
