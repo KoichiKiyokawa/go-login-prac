@@ -3,7 +3,7 @@ package service
 import (
 	"github.com/go-login-prac/entity"
 	"github.com/go-login-prac/repository"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/go-login-prac/util"
 )
 
 type IUserService interface {
@@ -38,11 +38,11 @@ func (s UserService) GetAllUsers() ([]entity.User, error) {
 }
 
 func (s UserService) CreateUser(user entity.User) (entity.User, error) {
-	encryptedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+	encryptedPassword, err := util.HashString(user.Password)
 	if err != nil {
 		return entity.User{}, nil
 	}
-	user.Password = string(encryptedPassword)
+	user.Password = encryptedPassword
 	s.userRepository.Create(user)
 	return user, nil
 }

@@ -5,7 +5,7 @@ import (
 
 	"github.com/go-login-prac/entity"
 	"github.com/go-login-prac/repository"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/go-login-prac/util"
 )
 
 type IAuthService interface {
@@ -27,9 +27,8 @@ func (s AuthService) ValidateUser(email string, password string) (entity.User, e
 	if err != nil {
 		return entity.User{}, commonError // 該当するメアドのユーザーがいない
 	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
-		return entity.User{}, commonError // パスワードが間違っている
+	if util.CompareHashAndString(user.Password, password) {
+		return user, nil
 	}
-	return user, nil
+	return entity.User{}, commonError // パスワードが間違っている
 }

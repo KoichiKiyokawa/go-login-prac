@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/go-login-prac/entity"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/go-login-prac/util"
 )
 
 type IUserRepository interface {
@@ -20,11 +20,11 @@ func NewUserRepository() UserRepository {
 	return UserRepository{}
 }
 
-var hogehogePassword, _ = bcrypt.GenerateFromPassword([]byte("hogehoge"), 10)
+var hogehogePassword, _ = util.HashString("hogehoge")
 
 var users = []entity.User{
-	{ID: 1, Name: "user1", Email: "hoge@example.com", Password: string(hogehogePassword)},
-	{ID: 2, Name: "user2", Email: "hoge2@example.com", Password: string(hogehogePassword)},
+	{ID: 1, Name: "user1", Email: "hoge@example.com", Password: hogehogePassword},
+	{ID: 2, Name: "user2", Email: "hoge2@example.com", Password: hogehogePassword},
 }
 
 func (UserRepository) Find(id int) (entity.User, error) {

@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/go-login-prac/entity"
-	"golang.org/x/crypto/bcrypt"
+	"github.com/go-login-prac/util"
 )
 
 type dummyUserRepository struct{}
@@ -12,7 +12,7 @@ type dummyUserRepository struct{}
 var dummyUser = entity.User{ID: 1, Email: "test@example.com", Name: "user1", Password: "testtest"}
 
 func (dummyUserRepository) FindByEmail(email string) (entity.User, error) {
-	var encryptedPassword, _ = bcrypt.GenerateFromPassword([]byte(dummyUser.Password), 10)
+	var encryptedPassword, _ = util.HashString(dummyUser.Password)
 	dummyUser.Password = string(encryptedPassword)
 	return dummyUser, nil
 }
