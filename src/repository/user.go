@@ -7,14 +7,14 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type IAuthRepository interface {
+type IUserRepository interface {
 	FindByEmail(id string) (entity.User, error)
 }
 
-type AuthRepository struct{}
+type UserRepository struct{}
 
-func NewAuthRepository() AuthRepository {
-	return AuthRepository{}
+func NewAuthRepository() UserRepository {
+	return UserRepository{}
 }
 
 var hogehogePassword, _ = bcrypt.GenerateFromPassword([]byte("hogehoge"), 10)
@@ -24,7 +24,7 @@ var users = []entity.User{
 	{Name: "user2", Email: "hoge2@example.com", Password: string(hogehogePassword)},
 }
 
-func (AuthRepository) FindByEmail(email string) (entity.User, error) {
+func (UserRepository) FindByEmail(email string) (entity.User, error) {
 	for _, user := range users {
 		if user.Email == email {
 			return user, nil

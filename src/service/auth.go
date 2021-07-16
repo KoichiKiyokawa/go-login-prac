@@ -13,10 +13,10 @@ type IAuthService interface {
 }
 
 type AuthService struct {
-	authRepository repository.IAuthRepository
+	authRepository repository.IUserRepository
 }
 
-func NewAuthService(authRepository repository.IAuthRepository) AuthService {
+func NewAuthService(authRepository repository.IUserRepository) AuthService {
 	return AuthService{authRepository: authRepository}
 }
 
