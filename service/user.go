@@ -43,6 +43,9 @@ func (s UserService) CreateUser(user entity.User) (entity.User, error) {
 		return entity.User{}, nil
 	}
 	user.Password = encryptedPassword
-	s.userRepository.Create(user)
-	return user, nil
+	createdUser, err := s.userRepository.Create(user)
+	if err != nil {
+		return entity.User{}, nil
+	}
+	return createdUser, nil
 }

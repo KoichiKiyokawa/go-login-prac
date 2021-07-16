@@ -39,5 +39,7 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (AuthController) AuthIndex(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(map[string]string{"message": "ok"})
+	if err := json.NewEncoder(w).Encode(map[string]string{"message": "ok"}); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
 }
