@@ -1,9 +1,9 @@
 package router
 
 import (
-	"github.com/go-login-prac/src/controller"
-	"github.com/go-login-prac/src/repository"
-	"github.com/go-login-prac/src/service"
+	"github.com/go-login-prac/controller"
+	"github.com/go-login-prac/repository"
+	"github.com/go-login-prac/service"
 	"github.com/gorilla/mux"
 )
 

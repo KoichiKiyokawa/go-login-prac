@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/go-login-prac/src/service"
+	"github.com/go-login-prac/service"
 )
 
 type AppController struct {

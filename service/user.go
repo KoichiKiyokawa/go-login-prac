@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/go-login-prac/src/entity"
-	"github.com/go-login-prac/src/repository"
+	"github.com/go-login-prac/entity"
+	"github.com/go-login-prac/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 

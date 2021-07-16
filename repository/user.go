@@ -3,7 +3,7 @@ package repository
 import (
 	"errors"
 
-	"github.com/go-login-prac/src/entity"
+	"github.com/go-login-prac/entity"
 	"golang.org/x/crypto/bcrypt"
 )
 

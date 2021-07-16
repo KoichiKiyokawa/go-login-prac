@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/go-login-prac/src/service"
+	"github.com/go-login-prac/service"
 )
 
 type AuthController struct {

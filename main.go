@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-login-prac/src/router"
+	"github.com/go-login-prac/router"
 	"github.com/gorilla/mux"
 )
 

@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/go-login-prac/src/entity"
-	"github.com/go-login-prac/src/service"
+	"github.com/go-login-prac/entity"
+	"github.com/go-login-prac/service"
 	"github.com/gorilla/mux"
 )
 
