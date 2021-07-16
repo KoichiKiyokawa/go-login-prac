@@ -18,8 +18,7 @@ type loginBody struct {
 
 func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 	var body loginBody
-	err := json.NewDecoder(r.Body).Decode(&body)
-	if err != nil {
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
