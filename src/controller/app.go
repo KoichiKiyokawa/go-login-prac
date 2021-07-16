@@ -7,9 +7,13 @@ import (
 )
 
 type AppController struct {
-	AppService service.IAppService
+	appService service.IAppService
+}
+
+func NewAppController(appService service.IAppService) AppController {
+	return AppController{appService: appService}
 }
 
 func (c AppController) Index(w http.ResponseWriter, r *http.Request) {
-	respondJson(w, map[string]string{"message": c.AppService.GetHello()})
+	respondJson(w, map[string]string{"message": c.appService.GetHello()})
 }

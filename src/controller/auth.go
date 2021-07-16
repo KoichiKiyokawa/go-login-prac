@@ -8,7 +8,11 @@ import (
 )
 
 type AuthController struct {
-	AuthService service.IAuthService
+	authService service.IAuthService
+}
+
+func NewAuthController(authService service.IAuthService) AuthController {
+	return AuthController{authService: authService}
 }
 
 type loginBody struct {
@@ -23,7 +27,7 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := c.AuthService.ValidateUser(body.Email, body.Password)
+	user, err := c.authService.ValidateUser(body.Email, body.Password)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusUnauthorized)
 		return

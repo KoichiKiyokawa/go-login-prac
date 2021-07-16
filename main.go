@@ -10,10 +10,6 @@ import (
 
 func main() {
 	r := mux.NewRouter().StrictSlash(true)
-	router.AuthRouter(r)
-	router.PostRouter(r)
-
-	router.ShowAllRoutes(r)
-
+	router.SetupRoutes(r)
 	log.Fatal(http.ListenAndServe(":8080", r))
 }

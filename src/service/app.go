@@ -6,6 +6,10 @@ type IAppService interface {
 
 type AppService struct{}
 
+func NewAppService() AppService {
+	return AppService{}
+}
+
 func (AppService) GetHello() string {
 	return "hello, world!"
 }

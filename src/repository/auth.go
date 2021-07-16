@@ -13,6 +13,10 @@ type IAuthRepository interface {
 
 type AuthRepository struct{}
 
+func NewAuthRepository() AuthRepository {
+	return AuthRepository{}
+}
+
 var hogehogePassword, _ = bcrypt.GenerateFromPassword([]byte("hogehoge"), 10)
 
 var users = []entity.User{

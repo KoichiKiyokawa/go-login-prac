@@ -6,8 +6,12 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func IndexRouter(r *mux.Router) {
-	appService := service.AppService{}
-	appController := controller.AppController{AppService: appService}
+func SetupRoutes(r *mux.Router) {
+	appService := service.NewAppService()
+	appController := controller.NewAppController(appService)
 	r.HandleFunc("/", appController.Index)
+
+	AuthRouter(r)
+	PostRouter(r)
+	ShowAllRoutes(r)
 }

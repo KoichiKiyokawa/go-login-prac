@@ -13,13 +13,17 @@ type IAuthService interface {
 }
 
 type AuthService struct {
-	AuthRepository repository.IAuthRepository
+	authRepository repository.IAuthRepository
+}
+
+func NewAuthService(authRepository repository.IAuthRepository) AuthService {
+	return AuthService{authRepository: authRepository}
 }
 
 func (s AuthService) ValidateUser(email string, password string) (entity.User, error) {
 	commonError := errors.New("email or password is wrong") // メアドが登録されていることを攻撃者に知らせないように、エラーは統一する
 
-	user, err := s.AuthRepository.FindByEmail(email)
+	user, err := s.authRepository.FindByEmail(email)
 	if err != nil {
 		return entity.User{}, commonError // 該当するメアドのユーザーがいない
 	}

@@ -9,9 +9,9 @@ import (
 
 func AuthRouter(r *mux.Router) {
 	// ここで依存を注入する
-	authRepository := repository.AuthRepository{}
-	authService := service.AuthService{AuthRepository: authRepository}
-	authController := controller.AuthController{AuthService: authService}
+	authRepository := repository.NewAuthRepository()
+	authService := service.NewAuthService(authRepository)
+	authController := controller.NewAuthController(authService)
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.HandleFunc("/login", authController.AuthLogin).Methods("POST")
