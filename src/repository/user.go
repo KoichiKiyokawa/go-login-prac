@@ -8,12 +8,14 @@ import (
 )
 
 type IUserRepository interface {
-	FindByEmail(id string) (entity.User, error)
+	FindByEmail(email string) (entity.User, error)
+	All() ([]entity.User, error)
+	Create(user entity.User) (entity.User, error)
 }
 
 type UserRepository struct{}
 
-func NewAuthRepository() UserRepository {
+func NewUserRepository() UserRepository {
 	return UserRepository{}
 }
 
@@ -31,4 +33,13 @@ func (UserRepository) FindByEmail(email string) (entity.User, error) {
 		}
 	}
 	return entity.User{}, errors.New("not found")
+}
+
+func (UserRepository) All() ([]entity.User, error) {
+	return users, nil
+}
+
+func (UserRepository) Create(user entity.User) (entity.User, error) {
+	users = append(users, user)
+	return user, nil
 }

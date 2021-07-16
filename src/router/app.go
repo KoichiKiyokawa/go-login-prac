@@ -12,6 +12,7 @@ func SetupRoutes(r *mux.Router) {
 	r.HandleFunc("/", appController.Index)
 
 	AuthRouter(r)
+	UserRouter(r)
 	PostRouter(r)
 	ShowAllRoutes(r)
 }
