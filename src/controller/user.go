@@ -3,9 +3,11 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"strconv"
 
 	"github.com/go-login-prac/src/entity"
 	"github.com/go-login-prac/src/service"
+	"github.com/gorilla/mux"
 )
 
 type UserController struct {
@@ -16,15 +18,29 @@ func NewUserController(userService service.IUserService) UserController {
 	return UserController{userService: userService}
 }
 
+func (c UserController) GetUserById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	idInt, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	user, err := c.userService.GetUser(idInt)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+
+	respondJson(w, user)
+}
+
 func (c UserController) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := c.userService.GetAllUsers()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := json.NewEncoder(w).Encode(users); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-	}
+	respondJson(w, users)
 }
 
 func (c UserController) CreateUser(w http.ResponseWriter, r *http.Request) {

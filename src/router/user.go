@@ -13,5 +13,6 @@ func UserRouter(r *mux.Router) {
 	userController := controller.NewUserController(userService)
 	s := r.PathPrefix("/users").Subrouter()
 	s.HandleFunc("/", userController.GetAllUsers).Methods("GET")
+	s.HandleFunc("/{id}", userController.GetUserById).Methods("GET")
 	s.HandleFunc("/", userController.CreateUser).Methods("POST")
 }
