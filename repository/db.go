@@ -17,7 +17,9 @@ func SetupDB() {
 	if err != nil {
 		panic(err)
 	}
-	_db.AutoMigrate(&entity.User{})
+	if err := _db.AutoMigrate(&entity.User{}); err != nil {
+		panic(err)
+	}
 	db = _db
 }
 
