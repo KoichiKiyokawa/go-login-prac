@@ -12,7 +12,6 @@ import (
 
 func main() {
 	repository.SetupDB()
-	repository.Seed()
 	r := mux.NewRouter().StrictSlash(true)
 	router.SetupRoutes(r)
 	r.Use(middleware.LoggingMiddleware, middleware.CorsMiddleware)

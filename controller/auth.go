@@ -24,7 +24,13 @@ type loginBody struct {
 	Password string `json:"password"`
 }
 
+const SESSION_USER_KEY = "currentUser"
+
 var store = sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY")))
+
+func getSession(r *http.Request) (*sessions.Session, error) {
+	return store.Get(r, "session")
+}
 
 func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 	var body loginBody
@@ -40,7 +46,7 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// write to session
-	session, err := store.Get(r, "session")
+	session, err := getSession(r)
 	if err != nil {
 		http.Error(w, errors.New("error in write session").Error(), http.StatusInternalServerError)
 		return
@@ -51,7 +57,7 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 		handleError(w, err, http.StatusInternalServerError)
 		return
 	}
-	session.Values["currentUser"] = json
+	session.Values[SESSION_USER_KEY] = json
 	if err := session.Save(r, w); err != nil {
 		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
 		return
@@ -61,18 +67,28 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c AuthController) AuthCheck(w http.ResponseWriter, r *http.Request) {
-	session, err := store.Get(r, "session")
+	session, err := getSession(r)
 	if err != nil {
 		http.Error(w, errors.WithStack(err).Error(), http.StatusUnauthorized)
 		return
 	}
 
-	if session.Values["currentUser"] == nil {
+	if session.Values[SESSION_USER_KEY] == nil {
 		http.Error(w, errors.New("not logged in").Error(), http.StatusUnauthorized)
 		return
 	}
 
 	respondJson(w, true)
+}
+
+func (AuthController) AuthLogout(w http.ResponseWriter, r *http.Request) {
+	session, err := getSession(r)
+	if err != nil {
+		handleError(w, err, http.StatusInternalServerError)
+		return
+	}
+	session.Values[SESSION_USER_KEY] = nil
+	return
 }
 
 func (AuthController) AuthIndex(w http.ResponseWriter, r *http.Request) {

@@ -23,13 +23,6 @@ func SetupDB() {
 	db = _db
 }
 
-func Seed() {
-	users := []entity.User{
-		{Email: "hoge@example.com", Password: "hogehoge"},
-		{Email: "hoge2@example.com", Password: "hogehoge2"},
-		{Email: "hoge3@example.com", Password: "hogehoge3"},
-	}
-	if err := db.Create(users).Error; err != nil {
-		panic(err)
-	}
+func GetDB() *gorm.DB {
+	return db
 }
