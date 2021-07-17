@@ -88,7 +88,6 @@ func (AuthController) AuthLogout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	session.Values[SESSION_USER_KEY] = nil
-	return
 }
 
 func (AuthController) AuthIndex(w http.ResponseWriter, r *http.Request) {
