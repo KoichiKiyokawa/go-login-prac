@@ -2,12 +2,14 @@ package controller
 
 import (
 	"encoding/json"
-	"errors"
+
 	"net/http"
 	"os"
 
 	"github.com/go-login-prac/entity"
 	"github.com/go-login-prac/service"
+	"github.com/pkg/errors"
+
 	"github.com/gorilla/sessions"
 )
 
@@ -29,26 +31,26 @@ var store = sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY")))
 func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 	var body loginBody
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
 		return
 	}
 
 	user, err := c.authService.ValidateUser(body.Email, body.Password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Error(w, errors.WithStack(err).Error(), http.StatusUnauthorized)
 		return
 	}
 
 	// セッションに書き込む処理
 	session, err := store.Get(r, "session")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
 		return
 	}
 
 	session.Values["currentUser"] = user
 	if err := session.Save(r, w); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
 		return
 	}
 
@@ -58,7 +60,7 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 func (c AuthController) AuthCheck(w http.ResponseWriter, r *http.Request) {
 	session, err := store.Get(r, "session")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Error(w, errors.WithStack(err).Error(), http.StatusUnauthorized)
 		return
 	}
 
@@ -69,7 +71,7 @@ func (c AuthController) AuthCheck(w http.ResponseWriter, r *http.Request) {
 	currentUser := session.Values["currentUser"].(entity.User)
 	_, err = c.authService.ValidateUser(currentUser.Email, currentUser.Password)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusUnauthorized)
+		http.Error(w, errors.WithStack(err).Error(), http.StatusUnauthorized)
 		return
 	}
 
@@ -78,6 +80,6 @@ func (c AuthController) AuthCheck(w http.ResponseWriter, r *http.Request) {
 
 func (AuthController) AuthIndex(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(map[string]string{"message": "ok"}); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
 	}
 }
