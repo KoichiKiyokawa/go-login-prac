@@ -5,11 +5,14 @@ import (
 	"net/http"
 
 	"github.com/go-login-prac/middleware"
+	"github.com/go-login-prac/repository"
 	"github.com/go-login-prac/router"
 	"github.com/gorilla/mux"
 )
 
 func main() {
+	repository.SetupDB()
+	repository.Seed()
 	r := mux.NewRouter().StrictSlash(true)
 	router.SetupRoutes(r)
 	r.Use(middleware.LoggingMiddleware, middleware.CorsMiddleware)

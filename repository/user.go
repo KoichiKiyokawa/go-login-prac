@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	"github.com/go-login-prac/entity"
-	"github.com/go-login-prac/util"
 )
 
 type IUserRepository interface {
@@ -20,37 +19,29 @@ func NewUserRepository() UserRepository {
 	return UserRepository{}
 }
 
-var hogehogePassword, _ = util.HashString("hogehoge")
-
-var users = []entity.User{
-	{ID: 1, Name: "user1", Email: "hoge@example.com", Password: hogehogePassword},
-	{ID: 2, Name: "user2", Email: "hoge2@example.com", Password: hogehogePassword},
-}
-
 func (UserRepository) Find(id int) (entity.User, error) {
-	for _, user := range users {
-		if user.ID == id {
-			return user, nil
-		}
+	var user entity.User
+	db.First(&user, id)
+	return user, errors.New("not found")
+}
+
+func (UserRepository) FindByEmail(email string) (user entity.User, err error) {
+	if err = db.Where("email = ?", email).Find(&user).Error; err != nil {
+		return
 	}
-	return entity.User{}, errors.New("not found")
+	return
 }
 
-func (UserRepository) FindByEmail(email string) (entity.User, error) {
-	for _, user := range users {
-		if user.Email == email {
-			return user, nil
-		}
+func (UserRepository) All() (users []entity.User, err error) {
+	if err = db.Find(&users).Error; err != nil {
+		return
 	}
-	return entity.User{}, errors.New("not found")
+	return
 }
 
-func (UserRepository) All() ([]entity.User, error) {
-	return users, nil
-}
-
-func (UserRepository) Create(user entity.User) (entity.User, error) {
-	user.ID = users[len(users)-1].ID + 1
-	users = append(users, user)
+func (UserRepository) Create(user entity.User) (createdUser entity.User, err error) {
+	if err = db.Create(user).Error; err != nil {
+		return
+	}
 	return user, nil
 }
