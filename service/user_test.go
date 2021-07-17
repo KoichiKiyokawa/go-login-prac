@@ -5,7 +5,10 @@ import (
 
 	"github.com/go-login-prac/entity"
 	"github.com/go-login-prac/util"
+	"gorm.io/gorm"
 )
+
+var dummyUser = entity.User{Email: "test@example.com", Name: "user1", Password: "testtest", Model: &gorm.Model{ID: 1}}
 
 type dummyUserRepository struct{}
 
@@ -27,7 +30,7 @@ func (dummyUserRepository) Create(user entity.User) (entity.User, error) {
 func TestCreateUser(t *testing.T) {
 	t.Run("will hash password before creating", func(t *testing.T) {
 		userService := NewUserService(dummyUserRepository{})
-		creatingUser := entity.User{ID: 1, Name: "1", Email: "t@example.com", Password: "testtest"}
+		creatingUser := entity.User{Model: &gorm.Model{ID: 1}, Name: "1", Email: "t@example.com", Password: "testtest"}
 		got, _ := userService.CreateUser(creatingUser)
 		if creatingUser.Password == got.Password {
 			t.Errorf("password is not hashed")

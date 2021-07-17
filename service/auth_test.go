@@ -2,11 +2,7 @@ package service
 
 import (
 	"testing"
-
-	"github.com/go-login-prac/entity"
 )
-
-var dummyUser = entity.User{ID: 1, Email: "test@example.com", Name: "user1", Password: "testtest"}
 
 func TestValidateUser(t *testing.T) {
 	t.Run("password encrypt is correct", func(t *testing.T) {
