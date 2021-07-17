@@ -87,7 +87,14 @@ func (AuthController) AuthLogout(w http.ResponseWriter, r *http.Request) {
 		handleError(w, err, http.StatusInternalServerError)
 		return
 	}
+
 	session.Values[SESSION_USER_KEY] = nil
+	if err := session.Save(r, w); err != nil {
+		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
+		return
+	}
+
+	respondJson(w, "ok")
 }
 
 func (AuthController) AuthIndex(w http.ResponseWriter, r *http.Request) {
