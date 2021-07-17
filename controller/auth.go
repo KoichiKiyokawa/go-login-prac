@@ -2,6 +2,7 @@ package controller
 
 import (
 	"encoding/json"
+	"log"
 
 	"net/http"
 	"os"
@@ -58,6 +59,7 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c AuthController) AuthCheck(w http.ResponseWriter, r *http.Request) {
+	log.Println("AuthCheck")
 	session, err := store.Get(r, "session")
 	if err != nil {
 		http.Error(w, errors.WithStack(err).Error(), http.StatusUnauthorized)
