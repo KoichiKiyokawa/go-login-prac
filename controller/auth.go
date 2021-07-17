@@ -3,8 +3,10 @@ package controller
 import (
 	"encoding/json"
 	"net/http"
+	"os"
 
 	"github.com/go-login-prac/service"
+	"github.com/gorilla/sessions"
 )
 
 type AuthController struct {
@@ -20,6 +22,8 @@ type loginBody struct {
 	Password string `json:"password"`
 }
 
+var store = sessions.NewCookieStore([]byte(os.Getenv("SESSION_KEY")))
+
 func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 	var body loginBody
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
@@ -33,7 +37,22 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// TODO: セッションに書き込む処理
+	// セッションに書き込む処理
+	session, err := store.Get(r, "session")
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	json, err := json.Marshal(user)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	session.Values["currentUser"] = json
+	if err := session.Save(r, w); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 
 	respondJson(w, user)
 }
