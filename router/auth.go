@@ -1,6 +1,8 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/go-login-prac/controller"
 	"github.com/go-login-prac/repository"
 	"github.com/go-login-prac/service"
@@ -14,7 +16,7 @@ func AuthRouter(r *mux.Router) {
 	authController := controller.NewAuthController(authService)
 
 	s := r.PathPrefix("/auth").Subrouter()
-	s.HandleFunc("/login", authController.AuthLogin).Methods("POST")
-	s.HandleFunc("/check", authController.AuthCheck).Methods("GET")
-	s.HandleFunc("/", authController.AuthIndex).Methods("GET")
+	s.HandleFunc("/login", authController.AuthLogin).Methods(http.MethodPost, http.MethodOptions)
+	s.HandleFunc("/check", authController.AuthCheck).Methods(http.MethodGet, http.MethodOptions)
+	s.HandleFunc("/", authController.AuthIndex).Methods(http.MethodGet, http.MethodOptions)
 }

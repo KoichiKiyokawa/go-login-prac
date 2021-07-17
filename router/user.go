@@ -1,6 +1,8 @@
 package router
 
 import (
+	"net/http"
+
 	"github.com/go-login-prac/controller"
 	"github.com/go-login-prac/repository"
 	"github.com/go-login-prac/service"
@@ -12,7 +14,7 @@ func UserRouter(r *mux.Router) {
 	userService := service.NewUserService(userRepository)
 	userController := controller.NewUserController(userService)
 	s := r.PathPrefix("/users").Subrouter()
-	s.HandleFunc("/", userController.GetAllUsers).Methods("GET")
-	s.HandleFunc("/{id}", userController.GetUserById).Methods("GET")
-	s.HandleFunc("/", userController.CreateUser).Methods("POST")
+	s.HandleFunc("/", userController.GetAllUsers).Methods(http.MethodGet, http.MethodOptions)
+	s.HandleFunc("/{id}", userController.GetUserById).Methods(http.MethodGet, http.MethodOptions)
+	s.HandleFunc("/", userController.CreateUser).Methods(http.MethodPost, http.MethodOptions)
 }
