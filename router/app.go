@@ -9,6 +9,7 @@ import (
 func SetupRoutes(r *mux.Router) {
 	appService := service.NewAppService()
 	appController := controller.NewAppController(appService)
+
 	r.HandleFunc("/", appController.Index)
 
 	AuthRouter(r)

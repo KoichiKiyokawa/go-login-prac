@@ -15,5 +15,6 @@ func AuthRouter(r *mux.Router) {
 
 	s := r.PathPrefix("/auth").Subrouter()
 	s.HandleFunc("/login", authController.AuthLogin).Methods("POST")
+	s.HandleFunc("/check", authController.AuthCheck).Methods("GET")
 	s.HandleFunc("/", authController.AuthIndex).Methods("GET")
 }
