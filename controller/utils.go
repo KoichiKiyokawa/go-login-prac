@@ -14,3 +14,7 @@ func respondJson(w http.ResponseWriter, response interface{}) {
 		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
 	}
 }
+
+func handleError(w http.ResponseWriter, err error, status int) {
+	http.Error(w, errors.WithStack(err).Error(), status)
+}

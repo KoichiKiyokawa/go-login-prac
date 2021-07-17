@@ -2,16 +2,13 @@ package controller
 
 import (
 	"encoding/json"
-	"log"
-
 	"net/http"
 	"os"
 
-	"github.com/go-login-prac/entity"
 	"github.com/go-login-prac/service"
-	"github.com/pkg/errors"
 
 	"github.com/gorilla/sessions"
+	"github.com/pkg/errors"
 )
 
 type AuthController struct {
@@ -42,14 +39,19 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// セッションに書き込む処理
+	// write to session
 	session, err := store.Get(r, "session")
 	if err != nil {
-		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
+		http.Error(w, errors.New("error in write session").Error(), http.StatusInternalServerError)
 		return
 	}
 
-	session.Values["currentUser"] = user
+	json, err := json.Marshal(user)
+	if err != nil {
+		handleError(w, err, http.StatusInternalServerError)
+		return
+	}
+	session.Values["currentUser"] = json
 	if err := session.Save(r, w); err != nil {
 		http.Error(w, errors.WithStack(err).Error(), http.StatusInternalServerError)
 		return
@@ -59,7 +61,6 @@ func (c AuthController) AuthLogin(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c AuthController) AuthCheck(w http.ResponseWriter, r *http.Request) {
-	log.Println("AuthCheck")
 	session, err := store.Get(r, "session")
 	if err != nil {
 		http.Error(w, errors.WithStack(err).Error(), http.StatusUnauthorized)
@@ -68,12 +69,6 @@ func (c AuthController) AuthCheck(w http.ResponseWriter, r *http.Request) {
 
 	if session.Values["currentUser"] == nil {
 		http.Error(w, errors.New("not logged in").Error(), http.StatusUnauthorized)
-		return
-	}
-	currentUser := session.Values["currentUser"].(entity.User)
-	_, err = c.authService.ValidateUser(currentUser.Email, currentUser.Password)
-	if err != nil {
-		http.Error(w, errors.WithStack(err).Error(), http.StatusUnauthorized)
 		return
 	}
 
